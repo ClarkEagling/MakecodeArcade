@@ -20,11 +20,13 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
         . . . . . . . 4 2 4 . . . . . . 
         . . . . . . . 4 2 4 . . . . . . 
         `, mySprite, 0, -200)
+    music.pewPew.play()
     projectile.startEffect(effects.fire, 200)
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Gas, function (sprite, otherSprite) {
     statusbar.value = 100
     otherSprite.destroy()
+    music.buzzer.play()
 })
 statusbars.onZero(StatusBarKind.Energy, function (status) {
     game.over(false)
@@ -32,6 +34,7 @@ statusbars.onZero(StatusBarKind.Energy, function (status) {
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, otherSprite) {
     otherSprite.destroy(effects.disintegrate, 100)
     sprite.destroy()
+    music.smallCrash.play()
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSprite) {
     info.changeLifeBy(-1)
@@ -42,6 +45,7 @@ let myFuel: Sprite = null
 let projectile: Sprite = null
 let statusbar: StatusBarSprite = null
 let mySprite: Sprite = null
+music.beamUp.play()
 effects.starField.startScreenEffect()
 mySprite = sprites.create(img`
     . . . . . . . c d . . . . . . . 
@@ -65,6 +69,7 @@ controller.moveSprite(mySprite)
 mySprite.setStayInScreen(true)
 statusbar = statusbars.create(20, 4, StatusBarKind.Energy)
 statusbar.attachToSprite(mySprite, -25, 0)
+let enemySpawnTime = 3000
 game.onUpdateInterval(5000, function () {
     myFuel = sprites.createProjectileFromSide(img`
         . . . . . . . . . . . . . . . . 
@@ -87,27 +92,28 @@ game.onUpdateInterval(5000, function () {
     myFuel.x = randint(5, 155)
     myFuel.setKind(SpriteKind.Gas)
 })
-game.onUpdateInterval(1000, function () {
+game.onUpdateInterval(enemySpawnTime, function () {
     myEnemy = sprites.createProjectileFromSide(img`
         . . . . . . . . . . . . . . . . 
         . . . . . . . . . . . . . . . . 
         . 4 . . . . . . . . . . . . 4 . 
         . 4 . . . . . . . . . . . . 4 . 
         . 4 4 4 . . . . . . . . 4 4 4 . 
-        . . . 4 . 2 . 2 . 2 . . 4 . . . 
+        . . . 4 . . . . . . . . 4 . . . 
         . . . . 5 a a a a a 5 5 . . . . 
-        . . . . 5 a c c c c c 5 . . . . 
-        . . . . 5 a c 5 5 a c 5 . . . . 
-        . . . . 5 a c 4 4 a c 5 . . . . 
+        4 4 4 . 5 a c c c c c 5 . 4 4 4 
+        . . 4 . 5 a c 5 5 a c 5 . 4 . . 
+        . . . 4 5 a c 4 f a c 5 4 . . . 
         . . . . 5 a c a a a c 5 . . . . 
         . . . . 5 5 c c c c c 5 . . . . 
-        . . . 4 . . 2 . 2 . 2 . 4 . . . 
+        4 . . 4 . . 2 . 2 . 2 . 4 . . 4 
         . 4 4 4 . . . . . . . . 4 4 4 . 
-        . 4 . . . . . . . . . . . . 4 . 
+        . . . . . . . . . . . . . . . . 
         . . . . . . . . . . . . . . . . 
         `, 0, 50)
     myEnemy.x = randint(5, 155)
     myEnemy.setKind(SpriteKind.Enemy)
+    enemySpawnTime += -1
 })
 game.onUpdateInterval(300, function () {
     statusbar.value += -1
