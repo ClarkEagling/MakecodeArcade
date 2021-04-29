@@ -28,24 +28,35 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Gas, function (sprite, otherSpri
     otherSprite.destroy()
     music.buzzer.play()
 })
+sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSprite) {
+    info.changeLifeBy(1)
+    otherSprite.destroy()
+    music.knock.play()
+})
 statusbars.onZero(StatusBarKind.Energy, function (status) {
     game.over(false)
+    music.bigCrash.play()
 })
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, otherSprite) {
     otherSprite.destroy(effects.disintegrate, 100)
     sprite.destroy()
     music.smallCrash.play()
+    info.changeScoreBy(1)
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSprite) {
     info.changeLifeBy(-1)
     otherSprite.destroy()
+    music.zapped.play()
 })
-let myEnemy: Sprite = null
 let myFuel: Sprite = null
+let lifeHeart: Sprite = null
+let myEnemy: Sprite = null
 let projectile: Sprite = null
 let statusbar: StatusBarSprite = null
 let mySprite: Sprite = null
+info.setLife(1)
 music.beamUp.play()
+info.setScore(0)
 effects.starField.startScreenEffect()
 mySprite = sprites.create(img`
     . . . . . . . c d . . . . . . . 
@@ -70,28 +81,7 @@ mySprite.setStayInScreen(true)
 statusbar = statusbars.create(20, 4, StatusBarKind.Energy)
 statusbar.attachToSprite(mySprite, -25, 0)
 let enemySpawnTime = 3000
-game.onUpdateInterval(5000, function () {
-    myFuel = sprites.createProjectileFromSide(img`
-        . . . . . . . . . . . . . . . . 
-        . . . . . . 6 6 6 6 . . . . . . 
-        . . . . 6 6 6 5 5 6 6 6 . . . . 
-        . . . 7 7 7 7 6 6 6 6 6 6 . . . 
-        . . 6 7 7 7 7 8 8 8 1 1 6 6 . . 
-        . . 7 7 7 7 7 8 8 8 1 1 5 6 . . 
-        . 6 7 7 7 7 8 8 8 8 8 5 5 6 6 . 
-        . 6 7 7 7 8 8 8 6 6 6 6 5 6 6 . 
-        . 6 6 7 7 8 8 6 6 6 6 6 6 6 6 . 
-        . 6 8 7 7 8 8 6 6 6 6 6 6 6 6 . 
-        . . 6 8 7 7 8 6 6 6 6 6 8 6 . . 
-        . . 6 8 8 7 8 8 6 6 6 8 6 6 . . 
-        . . . 6 8 8 8 8 8 8 8 8 6 . . . 
-        . . . . 6 6 8 8 8 8 6 6 . . . . 
-        . . . . . . 6 6 6 6 . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        `, 0, 50)
-    myFuel.x = randint(5, 155)
-    myFuel.setKind(SpriteKind.Gas)
-})
+let lifeSpawnTime = 25000
 game.onUpdateInterval(enemySpawnTime, function () {
     myEnemy = sprites.createProjectileFromSide(img`
         . . . . . . . . . . . . . . . . 
@@ -110,11 +100,60 @@ game.onUpdateInterval(enemySpawnTime, function () {
         . 4 4 4 . . . . . . . . 4 4 4 . 
         . . . . . . . . . . . . . . . . 
         . . . . . . . . . . . . . . . . 
-        `, 0, 50)
+        `, randint(-20, 20), 50)
     myEnemy.x = randint(5, 155)
     myEnemy.setKind(SpriteKind.Enemy)
-    enemySpawnTime += -1
+    enemySpawnTime += -10
 })
-game.onUpdateInterval(300, function () {
+game.onUpdateInterval(lifeSpawnTime, function () {
+    lifeHeart = sprites.createProjectileFromSide(img`
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . 2 2 2 . . . 2 2 2 . . . 
+        . . . 2 2 2 2 2 . 2 2 2 2 2 . . 
+        . . 2 2 2 2 2 2 2 2 2 2 2 2 2 . 
+        . . 2 2 2 2 2 2 2 2 2 2 2 2 2 . 
+        . . 2 2 2 2 2 2 2 2 2 2 2 2 2 . 
+        . . . 2 2 2 2 2 2 2 2 2 2 2 . . 
+        . . . . 2 2 2 2 2 2 2 2 2 . . . 
+        . . . . . 2 2 2 2 2 2 2 . . . . 
+        . . . . . . 2 2 2 2 2 . . . . . 
+        . . . . . . . 2 2 2 . . . . . . 
+        . . . . . . . . 2 . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        `, randint(-20, 20), 100)
+    lifeHeart.x = randint(5, 155)
+    lifeHeart.setKind(SpriteKind.Food)
+    lifeSpawnTime += 500
+    info.changeScoreBy(5)
+})
+game.onUpdateInterval(2000, function () {
+    music.spooky.loop()
+})
+game.onUpdateInterval(10000, function () {
+    myFuel = sprites.createProjectileFromSide(img`
+        . . . . . . . . . . . . . . . . 
+        . . . . . . 6 6 6 6 . . . . . . 
+        . . . . 6 6 6 5 5 6 6 6 . . . . 
+        . . . 7 7 7 7 6 6 6 6 6 6 . . . 
+        . . 6 7 7 7 7 8 8 8 1 1 6 6 . . 
+        . . 7 7 7 7 7 8 8 8 1 1 5 6 . . 
+        . 6 7 7 7 7 8 8 8 8 8 5 5 6 6 . 
+        . 6 7 7 7 8 8 8 6 6 6 6 5 6 6 . 
+        . 6 6 7 7 8 8 6 6 6 6 6 6 6 6 . 
+        . 6 8 7 7 8 8 6 6 6 6 6 6 6 6 . 
+        . . 6 8 7 7 8 6 6 6 6 6 8 6 . . 
+        . . 6 8 8 7 8 8 6 6 6 8 6 6 . . 
+        . . . 6 8 8 8 8 8 8 8 8 6 . . . 
+        . . . . 6 6 8 8 8 8 6 6 . . . . 
+        . . . . . . 6 6 6 6 . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        `, 0, 60)
+    myFuel.x = randint(20, 140)
+    myFuel.setKind(SpriteKind.Gas)
+})
+game.onUpdateInterval(120, function () {
     statusbar.value += -1
 })
