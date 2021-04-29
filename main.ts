@@ -41,10 +41,9 @@ function SpawnBaddie () {
         . 4 4 4 . . . . . . . . 4 4 4 . 
         . . . . . . . . . . . . . . . . 
         . . . . . . . . . . . . . . . . 
-        `, randint(-20, 20), 50)
+        `, randint(-20, 20), randint(50, 70))
     myEnemy.x = randint(5, 155)
     myEnemy.setKind(SpriteKind.Enemy)
-    enemySpawnTime += -10
 }
 function SpawnHeart () {
     lifeHeart = sprites.createProjectileFromSide(img`
@@ -79,6 +78,7 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSpr
     info.changeLifeBy(1)
     otherSprite.destroy()
     music.knock.play()
+    info.changeScoreBy(20)
 })
 statusbars.onZero(StatusBarKind.Energy, function (status) {
     music.bigCrash.play()
@@ -88,7 +88,7 @@ sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, oth
     otherSprite.destroy(effects.disintegrate, 100)
     sprite.destroy()
     music.smallCrash.play()
-    info.changeScoreBy(1)
+    info.changeScoreBy(5)
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSprite) {
     info.changeLifeBy(-1)
@@ -126,21 +126,35 @@ mySprite = sprites.create(img`
 controller.moveSprite(mySprite)
 mySprite.setStayInScreen(true)
 statusbar = statusbars.create(20, 4, StatusBarKind.Energy)
-statusbar.attachToSprite(mySprite, -25, 0)
+statusbar.positionDirection(CollisionDirection.Top)
+statusbar.setLabel("GAS")
 let enemySpawnTime = 3000
 let lifeSpawnTime = 25000
-game.onUpdateInterval(enemySpawnTime, function () {
-    if (enemySpawnTime <= game.runtime()) {
-        SpawnBaddie()
-    }
-})
-game.onUpdateInterval(lifeSpawnTime, function () {
-    if (lifeSpawnTime <= game.runtime()) {
-        SpawnHeart()
-    }
+game.onUpdateInterval(210, function () {
+    statusbar.value += -1
 })
 game.onUpdateInterval(2000, function () {
     music.spooky.loop()
+})
+game.onUpdateInterval(1000, function () {
+    info.changeScoreBy(1)
+})
+forever(function () {
+    if (lifeSpawnTime <= game.runtime()) {
+        SpawnHeart()
+    }
+    pause(lifeSpawnTime)
+})
+forever(function () {
+    if (enemySpawnTime <= game.runtime()) {
+        SpawnBaddie()
+    }
+    pause(enemySpawnTime)
+})
+game.onUpdateInterval(3000, function () {
+    if (enemySpawnTime > 30) {
+        enemySpawnTime += -30
+    }
 })
 game.onUpdateInterval(10000, function () {
     myFuel = sprites.createProjectileFromSide(img`
@@ -163,7 +177,4 @@ game.onUpdateInterval(10000, function () {
         `, 0, 60)
     myFuel.x = randint(20, 140)
     myFuel.setKind(SpriteKind.Gas)
-})
-game.onUpdateInterval(120, function () {
-    statusbar.value += -1
 })
