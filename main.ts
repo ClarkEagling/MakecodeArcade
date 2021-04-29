@@ -23,6 +23,53 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
     music.pewPew.play()
     projectile.startEffect(effects.fire, 200)
 })
+function SpawnBaddie () {
+    myEnemy = sprites.createProjectileFromSide(img`
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . 4 . . . . . . . . . . . . 4 . 
+        . 4 . . . . . . . . . . . . 4 . 
+        . 4 4 4 . . . . . . . . 4 4 4 . 
+        . . . 4 . . . . . . . . 4 . . . 
+        . . . . 5 a a a a a 5 5 . . . . 
+        4 4 4 . 5 a c c c c c 5 . 4 4 4 
+        . . 4 . 5 a c 5 5 a c 5 . 4 . . 
+        . . . 4 5 a c 4 f a c 5 4 . . . 
+        . . . . 5 a c a a a c 5 . . . . 
+        . . . . 5 5 c c c c c 5 . . . . 
+        4 . . 4 . . 2 . 2 . 2 . 4 . . 4 
+        . 4 4 4 . . . . . . . . 4 4 4 . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        `, randint(-20, 20), 50)
+    myEnemy.x = randint(5, 155)
+    myEnemy.setKind(SpriteKind.Enemy)
+    enemySpawnTime += -10
+}
+function SpawnHeart () {
+    lifeHeart = sprites.createProjectileFromSide(img`
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . 2 2 2 . . . 2 2 2 . . . 
+        . . . 2 2 2 2 2 . 2 2 2 2 2 . . 
+        . . 2 2 2 2 2 2 2 2 2 2 2 2 2 . 
+        . . 2 2 2 2 2 2 2 2 2 2 2 2 2 . 
+        . . 2 2 2 2 2 2 2 2 2 2 2 2 2 . 
+        . . . 2 2 2 2 2 2 2 2 2 2 2 . . 
+        . . . . 2 2 2 2 2 2 2 2 2 . . . 
+        . . . . . 2 2 2 2 2 2 2 . . . . 
+        . . . . . . 2 2 2 2 2 . . . . . 
+        . . . . . . . 2 2 2 . . . . . . 
+        . . . . . . . . 2 . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        `, randint(-20, 20), 100)
+    lifeHeart.x = randint(5, 155)
+    lifeHeart.setKind(SpriteKind.Food)
+    lifeSpawnTime += 500
+    info.changeScoreBy(5)
+}
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Gas, function (sprite, otherSprite) {
     statusbar.value = 100
     otherSprite.destroy()
@@ -34,8 +81,8 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSpr
     music.knock.play()
 })
 statusbars.onZero(StatusBarKind.Energy, function (status) {
-    game.over(false)
     music.bigCrash.play()
+    game.over(false, effects.splatter)
 })
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, otherSprite) {
     otherSprite.destroy(effects.disintegrate, 100)
@@ -83,51 +130,14 @@ statusbar.attachToSprite(mySprite, -25, 0)
 let enemySpawnTime = 3000
 let lifeSpawnTime = 25000
 game.onUpdateInterval(enemySpawnTime, function () {
-    myEnemy = sprites.createProjectileFromSide(img`
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . 4 . . . . . . . . . . . . 4 . 
-        . 4 . . . . . . . . . . . . 4 . 
-        . 4 4 4 . . . . . . . . 4 4 4 . 
-        . . . 4 . . . . . . . . 4 . . . 
-        . . . . 5 a a a a a 5 5 . . . . 
-        4 4 4 . 5 a c c c c c 5 . 4 4 4 
-        . . 4 . 5 a c 5 5 a c 5 . 4 . . 
-        . . . 4 5 a c 4 f a c 5 4 . . . 
-        . . . . 5 a c a a a c 5 . . . . 
-        . . . . 5 5 c c c c c 5 . . . . 
-        4 . . 4 . . 2 . 2 . 2 . 4 . . 4 
-        . 4 4 4 . . . . . . . . 4 4 4 . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        `, randint(-20, 20), 50)
-    myEnemy.x = randint(5, 155)
-    myEnemy.setKind(SpriteKind.Enemy)
-    enemySpawnTime += -10
+    if (enemySpawnTime <= game.runtime()) {
+        SpawnBaddie()
+    }
 })
 game.onUpdateInterval(lifeSpawnTime, function () {
-    lifeHeart = sprites.createProjectileFromSide(img`
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . 2 2 2 . . . 2 2 2 . . . 
-        . . . 2 2 2 2 2 . 2 2 2 2 2 . . 
-        . . 2 2 2 2 2 2 2 2 2 2 2 2 2 . 
-        . . 2 2 2 2 2 2 2 2 2 2 2 2 2 . 
-        . . 2 2 2 2 2 2 2 2 2 2 2 2 2 . 
-        . . . 2 2 2 2 2 2 2 2 2 2 2 . . 
-        . . . . 2 2 2 2 2 2 2 2 2 . . . 
-        . . . . . 2 2 2 2 2 2 2 . . . . 
-        . . . . . . 2 2 2 2 2 . . . . . 
-        . . . . . . . 2 2 2 . . . . . . 
-        . . . . . . . . 2 . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        `, randint(-20, 20), 100)
-    lifeHeart.x = randint(5, 155)
-    lifeHeart.setKind(SpriteKind.Food)
-    lifeSpawnTime += 500
-    info.changeScoreBy(5)
+    if (lifeSpawnTime <= game.runtime()) {
+        SpawnHeart()
+    }
 })
 game.onUpdateInterval(2000, function () {
     music.spooky.loop()
