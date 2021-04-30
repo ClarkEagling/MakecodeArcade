@@ -1,5 +1,6 @@
 {
     "name": "Clarks Ship Blast-O-Rama",
+    "version": "1.0.0",
     "description": "",
     "dependencies": {
         "device": "*",
