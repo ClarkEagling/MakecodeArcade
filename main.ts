@@ -158,8 +158,18 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSpr
     music.knock.play()
     info.changeScoreBy(20)
 })
+info.player1.onLifeZero(function () {
+    music.siren.play()
+    if (fistCount == 0) {
+        game.splash("PACIFIST RUN")
+    } else if (fistCount >= 50) {
+        game.splash("MASSIVE FIST RUN")
+    }
+    game.over(false, effects.splatter)
+})
 statusbars.onZero(StatusBarKind.Energy, function (status) {
     music.bigCrash.play()
+    game.splash("YOU RAN OUT OF GAS!")
     game.over(false, effects.splatter)
 })
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, otherSprite) {
@@ -167,6 +177,7 @@ sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, oth
     sprite.destroy()
     music.smallCrash.play()
     info.changeScoreBy(5)
+    fistCount += 1
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSprite) {
     info.changeLifeBy(-1)
@@ -178,6 +189,7 @@ let lifeHeart: Sprite = null
 let myEnemy: Sprite = null
 let enemies = 0
 let projectile: Sprite = null
+let fistCount = 0
 let statusbar: StatusBarSprite = null
 let mySprite: Sprite = null
 info.setLife(1)
@@ -210,6 +222,7 @@ statusbar.positionDirection(CollisionDirection.Top)
 statusbar.setLabel("GAS")
 let enemySpawnTime = 3000
 let lifeSpawnTime = 25000
+fistCount = 0
 game.onUpdateInterval(210, function () {
     statusbar.value += -1
 })
@@ -243,12 +256,12 @@ game.onUpdateInterval(10000, function () {
         . . . . 6 6 6 5 5 6 6 6 . . . . 
         . . . 7 7 7 7 6 6 6 6 6 6 . . . 
         . . 6 7 7 7 7 8 8 8 1 1 6 6 . . 
-        . . 7 7 7 7 7 8 8 8 1 1 5 6 . . 
+        . 1 7 7 7 7 7 8 8 8 1 1 5 6 1 . 
         . 6 7 7 7 7 8 8 8 8 8 5 5 6 6 . 
         . 6 7 7 7 8 8 8 6 5 6 6 5 6 6 . 
         . 6 6 7 7 8 8 6 6 5 6 6 6 6 6 . 
         . 6 8 7 7 8 8 5 5 5 5 5 6 6 6 . 
-        . . 6 8 7 7 8 6 6 5 6 6 8 6 . . 
+        . 1 6 8 7 7 8 6 6 5 6 6 8 6 1 . 
         . . 6 8 8 7 8 8 6 5 6 8 6 6 . . 
         . . . 6 8 8 8 8 8 8 8 8 6 . . . 
         . . . . 6 6 8 8 8 8 6 6 . . . . 
