@@ -182,6 +182,7 @@ let statusbar: StatusBarSprite = null
 let mySprite: Sprite = null
 info.setLife(1)
 music.beamUp.play()
+game.setGameOverSound(false, music.bigCrash)
 info.setScore(0)
 effects.starField.startScreenEffect()
 mySprite = sprites.create(img`
@@ -242,12 +243,12 @@ game.onUpdateInterval(10000, function () {
         . . . . 6 6 6 5 5 6 6 6 . . . . 
         . . . 7 7 7 7 6 6 6 6 6 6 . . . 
         . . 6 7 7 7 7 8 8 8 1 1 6 6 . . 
-        . 1 7 7 7 7 7 8 8 8 1 1 5 6 1 . 
+        . . 7 7 7 7 7 8 8 8 1 1 5 6 . . 
         . 6 7 7 7 7 8 8 8 8 8 5 5 6 6 . 
         . 6 7 7 7 8 8 8 6 5 6 6 5 6 6 . 
         . 6 6 7 7 8 8 6 6 5 6 6 6 6 6 . 
         . 6 8 7 7 8 8 5 5 5 5 5 6 6 6 . 
-        . 1 6 8 7 7 8 6 6 5 6 6 8 6 1 . 
+        . . 6 8 7 7 8 6 6 5 6 6 8 6 . . 
         . . 6 8 8 7 8 8 6 5 6 8 6 6 . . 
         . . . 6 8 8 8 8 8 8 8 8 6 . . . 
         . . . . 6 6 8 8 8 8 6 6 . . . . 
