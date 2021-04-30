@@ -24,24 +24,102 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
     projectile.startEffect(effects.fire, 200)
 })
 function SpawnBaddie () {
-    myEnemy = sprites.createProjectileFromSide(img`
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        . 4 . . . . . . . . . . . . 4 . 
-        . 4 . . . . . . . . . . . . 4 . 
-        . 4 4 4 . . . . . . . . 4 4 4 . 
-        . . . 4 . . . . . . . . 4 . . . 
-        . . . . 5 a a a a a 5 5 . . . . 
-        4 4 4 . 5 a c c c c c 5 . 4 4 4 
-        . . 4 . 5 a c 5 5 a c 5 . 4 . . 
-        . . . 4 5 a c 4 f a c 5 4 . . . 
-        . . . . 5 a c a a a c 5 . . . . 
-        . . . . 5 5 c c c c c 5 . . . . 
-        4 . . 4 . . 2 . 2 . 2 . 4 . . 4 
-        . 4 4 4 . . . . . . . . 4 4 4 . 
-        . . . . . . . . . . . . . . . . 
-        . . . . . . . . . . . . . . . . 
-        `, randint(-20, 20), randint(50, 70))
+    enemies = randint(0, 2)
+    if (enemies == 0) {
+        myEnemy = sprites.createProjectileFromSide(img`
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . 4 . . . . . . . . . . . . 4 . 
+            . 4 . . . . . . . . . . . . 4 . 
+            . 4 4 4 . . . . . . . . 4 4 4 . 
+            . . . 4 . . . . . . . . 4 . . . 
+            . . . . 5 a a a a a 5 5 . . . . 
+            4 4 4 . 5 a c c c c c 5 . 4 4 4 
+            . . 4 . 5 a c 5 5 a c 5 . 4 . . 
+            . . . 4 5 a c 4 f a c 5 4 . . . 
+            . . . . 5 a c a a a c 5 . . . . 
+            . . . . 5 5 c c c c c 5 . . . . 
+            4 . . 4 . . 2 . 2 . 2 . 4 . . 4 
+            . 4 4 4 . . . . . . . . 4 4 4 . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            `, randint(-20, 20), randint(50, 70))
+    } else if (enemies == 1) {
+        myEnemy = sprites.createProjectileFromSide(img`
+            . . . . . . . . . . . . . . . . 
+            . . 6 6 6 . . . . . . 6 6 6 . . 
+            . 6 . . . 6 . . . . 6 . . . 6 . 
+            . 6 . . . 6 . . . . 6 . . . 6 . 
+            . 6 6 6 . . . . . . . . 6 6 6 . 
+            . . . 6 6 . a a a a . 6 6 . . . 
+            . . . . 6 7 7 7 7 7 a 6 . . . . 
+            6 6 6 . a 7 c c c c c a . 6 6 6 
+            . . 6 . a 7 c 5 5 7 c a . 6 . . 
+            . . . 6 a 7 c 6 f 7 c a 6 . . . 
+            6 6 . . a 7 c 7 7 7 c a . . 6 6 
+            6 . . . a a c c c c c a . . . 6 
+            6 . . 6 . . 2 . 2 . 2 . 6 . . 6 
+            . 6 6 6 . . . . . . . . 6 6 6 . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            `, randint(-20, 20), randint(60, 90))
+    } else if (enemies == 2) {
+        myEnemy = sprites.createProjectileFromSide(img`
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . a a a a . . . . . . 
+            . . . . . 4 4 4 4 4 a . . . . . 
+            7 7 7 . a 4 c c c c c a . 7 7 7 
+            . . 7 . a 4 c f f 4 c a . 7 . . 
+            7 7 . 7 a 4 c 2 f 4 c a 7 . 7 7 
+            . . . . a 4 c 4 4 4 c a . . . . 
+            . . . . a a c c c c c a . . . . 
+            . . . 7 . . 2 . 2 . 2 . 7 . . . 
+            . 7 7 7 . . . . . . . . 7 7 7 . 
+            7 . . . . . . . . . . . . . . 7 
+            7 . . . . . . . . . . . . . . 7 
+            `, randint(-20, 20), randint(30, 50))
+    } else {
+        myEnemy = sprites.createProjectileFromSide(img`
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            . 4 . . . . . . . . . . . . 4 . 
+            . 4 . . . . . . . . . . . . 4 . 
+            . 4 4 4 . . . . . . . . 4 4 4 . 
+            . . . 4 . . . . . . . . 4 . . . 
+            . . . . 5 a a a a a 5 5 . . . . 
+            4 4 4 . 5 a c c c c c 5 . 4 4 4 
+            . . 4 . 5 a c 5 5 a c 5 . 4 . . 
+            . . . 4 5 a c 4 f a c 5 4 . . . 
+            . . . . 5 a c a a a c 5 . . . . 
+            . . . . 5 5 c c c c c 5 . . . . 
+            4 . . 4 . . 2 . 2 . 2 . 4 . . 4 
+            . 4 4 4 . . . . . . . . 4 4 4 . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            `, randint(-20, 20), randint(50, 70))
+        myEnemy = sprites.createProjectileFromSide(img`
+            . . . . . . . . . . . . . . . . 
+            . . 6 6 6 . . . . . . 6 6 6 . . 
+            . 6 . . . 6 . . . . 6 . . . 6 . 
+            . 6 . . . 6 . . . . 6 . . . 6 . 
+            . 6 6 6 . . . . . . . . 6 6 6 . 
+            . . . 6 6 . a a a a . 6 6 . . . 
+            . . . . 6 7 7 7 7 7 a 6 . . . . 
+            6 6 6 . a 7 c c c c c a . 6 6 6 
+            . . 6 . a 7 c 5 5 7 c a . 6 . . 
+            . . . 6 a 7 c 6 f 7 c a 6 . . . 
+            6 6 . . a 7 c 7 7 7 c a . . 6 6 
+            6 . . . a a c c c c c a . . . 6 
+            6 . . 6 . . 2 . 2 . 2 . 6 . . 6 
+            . 6 6 6 . . . . . . . . 6 6 6 . 
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . . . . . . . . 
+            `, randint(-20, 20), randint(50, 70))
+    }
     myEnemy.x = randint(5, 155)
     myEnemy.setKind(SpriteKind.Enemy)
 }
@@ -98,6 +176,7 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSp
 let myFuel: Sprite = null
 let lifeHeart: Sprite = null
 let myEnemy: Sprite = null
+let enemies = 0
 let projectile: Sprite = null
 let statusbar: StatusBarSprite = null
 let mySprite: Sprite = null
@@ -163,13 +242,13 @@ game.onUpdateInterval(10000, function () {
         . . . . 6 6 6 5 5 6 6 6 . . . . 
         . . . 7 7 7 7 6 6 6 6 6 6 . . . 
         . . 6 7 7 7 7 8 8 8 1 1 6 6 . . 
-        . . 7 7 7 7 7 8 8 8 1 1 5 6 . . 
+        . 1 7 7 7 7 7 8 8 8 1 1 5 6 1 . 
         . 6 7 7 7 7 8 8 8 8 8 5 5 6 6 . 
-        . 6 7 7 7 8 8 8 6 6 6 6 5 6 6 . 
-        . 6 6 7 7 8 8 6 6 6 6 6 6 6 6 . 
-        . 6 8 7 7 8 8 6 6 6 6 6 6 6 6 . 
-        . . 6 8 7 7 8 6 6 6 6 6 8 6 . . 
-        . . 6 8 8 7 8 8 6 6 6 8 6 6 . . 
+        . 6 7 7 7 8 8 8 6 5 6 6 5 6 6 . 
+        . 6 6 7 7 8 8 6 6 5 6 6 6 6 6 . 
+        . 6 8 7 7 8 8 5 5 5 5 5 6 6 6 . 
+        . 1 6 8 7 7 8 6 6 5 6 6 8 6 1 . 
+        . . 6 8 8 7 8 8 6 5 6 8 6 6 . . 
         . . . 6 8 8 8 8 8 8 8 8 6 . . . 
         . . . . 6 6 8 8 8 8 6 6 . . . . 
         . . . . . . 6 6 6 6 . . . . . . 
