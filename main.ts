@@ -150,7 +150,7 @@ function SpawnHeart () {
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Gas, function (sprite, otherSprite) {
     statusbar.value = 100
     otherSprite.destroy()
-    music.buzzer.play()
+    music.bigCrash.play()
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSprite) {
     info.changeLifeBy(1)
