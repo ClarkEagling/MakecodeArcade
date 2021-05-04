@@ -159,7 +159,7 @@ sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSpr
     info.changeScoreBy(20)
 })
 info.player1.onLifeZero(function () {
-    music.siren.play()
+    music.bigCrash.play()
     if (fistCount == 0) {
         game.splash("PACIFIST RUN")
     } else if (fistCount >= 50) {
@@ -256,12 +256,12 @@ game.onUpdateInterval(10000, function () {
         . . . . 6 6 6 5 5 6 6 6 . . . . 
         . . . 7 7 7 7 6 6 6 6 6 6 . . . 
         . . 6 7 7 7 7 8 8 8 1 1 6 6 . . 
-        . 1 7 7 7 7 7 8 8 8 1 1 5 6 1 . 
+        . . 7 7 7 7 7 8 8 8 1 1 5 6 . . 
         . 6 7 7 7 7 8 8 8 8 8 5 5 6 6 . 
         . 6 7 7 7 8 8 8 6 5 6 6 5 6 6 . 
         . 6 6 7 7 8 8 6 6 5 6 6 6 6 6 . 
         . 6 8 7 7 8 8 5 5 5 5 5 6 6 6 . 
-        . 1 6 8 7 7 8 6 6 5 6 6 8 6 1 . 
+        . . 6 8 7 7 8 6 6 5 6 6 8 6 . . 
         . . 6 8 8 7 8 8 6 5 6 8 6 6 . . 
         . . . 6 8 8 8 8 8 8 8 8 6 . . . 
         . . . . 6 6 8 8 8 8 6 6 . . . . 
