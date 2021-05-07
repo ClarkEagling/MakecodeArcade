@@ -24,7 +24,7 @@ controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
     projectile.startEffect(effects.fire, 200)
 })
 function SpawnBaddie () {
-    enemies = randint(0, 2)
+    enemies = randint(0, 3)
     if (enemies == 0) {
         myEnemy = sprites.createProjectileFromSide(img`
             . . . . . . . . . . . . . . . . 
@@ -150,7 +150,7 @@ function SpawnHeart () {
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Gas, function (sprite, otherSprite) {
     statusbar.value = 100
     otherSprite.destroy()
-    music.bigCrash.play()
+    music.buzzer.play()
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Food, function (sprite, otherSprite) {
     info.changeLifeBy(1)
