@@ -1,6 +1,31 @@
 namespace SpriteKind {
     export const Gas = SpriteKind.create()
+    export const shield = SpriteKind.create()
 }
+controller.B.onEvent(ControllerButtonEvent.Pressed, function () {
+    friend.follow(mySprite, 0)
+    projectile2 = sprites.createProjectileFromSprite(img`
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . 5 . . . . . . 
+        . . . . . . . . 5 5 . . . . . . 
+        . . . . . . . 5 5 3 . . . . . . 
+        . . . . . . . 5 3 . . . . . . . 
+        . . . . . . 5 5 3 . . . . . . . 
+        . . . . . . 5 5 5 5 . . . . . . 
+        . . . . . . 3 3 5 3 . . . . . . 
+        . . . . . . . . 5 3 . . . . . . 
+        . . . . . . . 5 5 . . . . . . . 
+        . . . . . . 5 5 3 . . . . . . . 
+        . . . . . . 5 3 . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        . . . . . . . . . . . . . . . . 
+        `, friend, 0, -200)
+    timer.after(100, function () {
+        friend.follow(mySprite, friendSpeed)
+    })
+})
 controller.A.onEvent(ControllerButtonEvent.Pressed, function () {
     projectile = sprites.createProjectileFromSprite(img`
         . . . . . . . . . . . . . . . . 
@@ -44,6 +69,46 @@ function SpawnBaddie () {
             . . . . . . . . . . . . . . . . 
             . . . . . . . . . . . . . . . . 
             `, randint(-20, 20), randint(50, 70))
+        animation.runImageAnimation(
+        myEnemy,
+        [img`
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . 4 4 4 4 . . . 
+            . . . . . . . . 4 4 5 5 5 . . . 
+            . . 4 4 . . . 4 4 5 5 5 5 . . . 
+            . . 5 5 4 4 . 4 5 5 5 5 5 5 . . 
+            . . 5 5 5 4 . 4 5 5 5 5 5 5 . . 
+            . 5 5 5 5 4 4 5 5 5 5 5 5 5 5 . 
+            . 5 5 5 5 5 5 5 5 5 5 5 5 5 5 . 
+            . 5 5 5 5 5 5 5 5 5 1 1 1 5 5 . 
+            . 5 5 1 1 1 5 5 5 1 1 1 1 5 5 . 
+            5 5 1 f 1 1 5 5 1 1 f 1 1 1 5 . 
+            5 5 1 f 1 1 5 5 1 1 f 1 1 1 5 . 
+            5 5 5 1 1 5 5 5 5 1 1 1 1 5 5 . 
+            5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 . 
+            . . 5 5 5 5 5 5 5 5 5 5 5 5 5 . 
+            . . . 4 4 4 4 5 5 5 5 5 5 5 4 . 
+            `,img`
+            . . . . . . . . . . . . . . . . 
+            . . . . . . . . . 4 4 4 4 . . . 
+            . . . . . . . . 4 4 5 5 5 . . . 
+            . . 4 4 . . . 4 4 5 5 5 5 . . . 
+            . . 5 5 4 4 . 4 5 5 5 5 5 5 . . 
+            . . 5 5 5 4 . 4 5 5 5 5 5 5 . . 
+            . 5 5 5 5 4 4 5 5 5 5 5 5 5 5 . 
+            . 5 5 5 5 5 5 5 5 5 5 5 5 5 5 . 
+            . 5 5 5 5 5 5 5 5 5 1 1 1 5 5 . 
+            . 5 5 1 1 1 5 5 5 1 1 1 1 5 5 . 
+            5 5 1 1 1 f 5 5 1 1 1 1 f 1 5 . 
+            5 5 1 1 1 f 5 5 1 1 1 1 f 1 5 . 
+            5 5 5 1 1 5 5 5 5 1 1 1 1 5 5 . 
+            5 5 5 5 5 5 5 5 5 5 5 5 5 5 5 . 
+            . . 5 5 5 5 5 5 5 5 5 5 5 5 5 . 
+            . . . 4 4 4 4 5 5 5 5 5 5 5 4 . 
+            `],
+        200,
+        true
+        )
     } else if (enemies == 1) {
         myEnemy = sprites.createProjectileFromSide(img`
             . . . . . . . . . . . . . . . . 
@@ -162,8 +227,6 @@ info.player1.onLifeZero(function () {
     music.bigCrash.play()
     if (fistCount == 0) {
         game.splash("PACIFIST RUN")
-    } else if (fistCount >= 50) {
-        game.splash("MASSIVE FIST RUN")
     }
     game.over(false, effects.splatter)
 })
@@ -175,12 +238,10 @@ statusbars.onZero(StatusBarKind.Energy, function (status) {
 sprites.onOverlap(SpriteKind.Projectile, SpriteKind.Enemy, function (sprite, otherSprite) {
     otherSprite.destroy(effects.disintegrate, 100)
     sprite.destroy()
-    music.smallCrash.play()
-    info.changeScoreBy(5)
     fistCount += 1
 })
 sprites.onOverlap(SpriteKind.Player, SpriteKind.Enemy, function (sprite, otherSprite) {
-    info.changeLifeBy(-1)
+    info.changeLifeBy(-1 * damageMultiplyer)
     otherSprite.destroy()
     music.zapped.play()
 })
@@ -189,6 +250,10 @@ let lifeHeart: Sprite = null
 let myEnemy: Sprite = null
 let enemies = 0
 let projectile: Sprite = null
+let projectile2: Sprite = null
+let friend: Sprite = null
+let friendSpeed = 0
+let damageMultiplyer = 0
 let fistCount = 0
 let statusbar: StatusBarSprite = null
 let mySprite: Sprite = null
@@ -223,6 +288,15 @@ statusbar.setLabel("GAS")
 let enemySpawnTime = 3000
 let lifeSpawnTime = 25000
 fistCount = 0
+damageMultiplyer = 1
+friendSpeed = 100
+let friendEvent = 0
+game.onUpdate(function () {
+    if (info.score() >= 200 && friendEvent == 0) {
+        friend = sprites.create(assets.image`stealth0`, SpriteKind.shield)
+        friendEvent = 1
+    }
+})
 game.onUpdateInterval(210, function () {
     statusbar.value += -1
 })
