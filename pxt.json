@@ -5,7 +5,8 @@
     "dependencies": {
         "device": "*",
         "pxt-status-bar": "github:jwunderl/pxt-status-bar",
-        "Timers": "github:microsoft/arcade-timers#v1.1.0"
+        "Timers": "github:microsoft/arcade-timers#v1.1.0",
+        "arcade-sprite-util": "github:jwunderl/arcade-sprite-util#v0.2.5"
     },
     "files": [
         "main.blocks",
@@ -24,12 +25,12 @@
         "branch": "v1.4.40",
         "tag": "v1.4.40",
         "commits": "https://github.com/microsoft/pxt-arcade/commits/6e7016f2daff5c7a6de3f15abd027b9f32fe5b28",
-        "target": "1.8.22",
+        "target": "1.8.23",
         "pxt": "6.12.22",
         "targetId": "arcade"
     },
     "supportedTargets": [
         "arcade"
     ],
-    "preferredEditor": "tsprj"
+    "preferredEditor": "blocksprj"
 }
